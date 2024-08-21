@@ -25,7 +25,9 @@ fi
 
 # Start VNC server
 if ! pgrep tigervncserver > /dev/null; then
-  tigervncserver -SecurityTypes none -desktop fluxbox
+  mkdir -p ~/.vnc
+  echo "��<�rzX" > ~/.vnc/passwd
+  tigervncserver -localhost yes -SecurityTypes None,Plain,TLSNone,TLSPlain,VncAuth -desktop fluxbox -PasswordFile ~/.vnc/passwd
 fi
 
 # Background
