@@ -16,7 +16,7 @@ The other NEW option is to SSH into CircleCI and use VNC.
    ```
 
 4. Copy the command that CircleCI gives you and add `-L 5902:localhost:5901` (this will tunnel the VNC connection over SSH)
-5. Enter this in a terminal for example `ssh -p xxxxx xxx.xxx.xxx.xxx -L 5902:localhost:5901`
+5. Enter this in a terminal, for example `ssh -p xxxxx xxx.xxx.xxx.xxx -L 5902:localhost:5901`
 6. When you login to SSH, it automatically executes `/.circleci/scripts/enable-vnc.sh` to set up the connection
 7. Use your favorite VNC viewer on your local machine to connect to `localhost:5902`
    - Mac: Finder menu > GO > Connect to server (or <Cmd> + K), then use `vnc://localhost:5902`
@@ -28,6 +28,7 @@ The other NEW option is to SSH into CircleCI and use VNC.
 
 This procedure was based on the documentation from CircleCI, which does not work as written [here](https://circleci.com/docs/browser-testing/#interacting-with-the-browser-over-vnc).
 
-> [!WARNING]  
+> [!WARNING]
+>
 > - Be careful with parallelism. If you run "Rerun job with SSH" on a job that has `parallelism: 24`, it will rerun all 24 VMs with SSH.
 > - The original E2E tests are probably still running in the background, but they are not displayed in the VNC window. You may want to kill their process. In a future version, we may be able to display them in VNC.
