@@ -1,34 +1,31 @@
-// Disabled to allow setting up initial state hooks first
+import '../../development/wdyr';
 
 // This import sets up global functions required for Sentry to function.
 // It must be run first in case an error is thrown later during initialization.
 import './lib/setup-initial-state-hooks';
-import '../../development/wdyr';
 
-// dev only, "react-devtools" import is skipped in prod builds
-import 'react-devtools';
-
-import PortStream from 'extension-port-stream';
-import browser from 'webextension-polyfill';
-
-import Eth from '@metamask/ethjs';
 import EthQuery from '@metamask/eth-query';
-import StreamProvider from 'web3-stream-provider';
+import Eth from '@metamask/ethjs';
+import * as Sentry from '@sentry/browser';
+import PortStream from 'extension-port-stream';
 import log from 'loglevel';
-import launchMetaMaskUi, { updateBackgroundConnection } from '../../ui';
+import 'react-devtools'; // dev only, "react-devtools" import is skipped in prod builds
+import StreamProvider from 'web3-stream-provider';
+import browser from 'webextension-polyfill';
 import {
   ENVIRONMENT_TYPE_FULLSCREEN,
   ENVIRONMENT_TYPE_POPUP,
   PLATFORM_FIREFOX,
 } from '../../shared/constants/app';
-import { isManifestV3 } from '../../shared/modules/mv3.utils';
-import { checkForLastErrorAndLog } from '../../shared/modules/browser-runtime.utils';
-import { SUPPORT_LINK } from '../../shared/lib/ui-utils';
 import { getErrorHtml } from '../../shared/lib/error-utils';
-import ExtensionPlatform from './platforms/extension';
+import { SUPPORT_LINK } from '../../shared/lib/ui-utils';
+import { checkForLastErrorAndLog } from '../../shared/modules/browser-runtime.utils';
+import { isManifestV3 } from '../../shared/modules/mv3.utils';
+import launchMetaMaskUi, { updateBackgroundConnection } from '../../ui';
+import metaRPCClientFactory from './lib/metaRPCClientFactory';
 import { setupMultiplex } from './lib/stream-utils';
 import { getEnvironmentType, getPlatform } from './lib/util';
-import metaRPCClientFactory from './lib/metaRPCClientFactory';
+import ExtensionPlatform from './platforms/extension';
 
 const container = document.getElementById('app-content');
 
@@ -212,6 +209,12 @@ async function start() {
       if (process.env.IN_TEST) {
         window.document?.documentElement?.classList.add('controller-loaded');
       }
+
+      Sentry.setMeasurement(
+        'ui.initialized',
+        performance.now(),
+        'milliseconds',
+      );
 
       const state = store.getState();
       const { metamask: { completedOnboarding } = {} } = state;

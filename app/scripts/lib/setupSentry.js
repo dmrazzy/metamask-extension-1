@@ -85,6 +85,7 @@ function getClientOptions() {
       Sentry.browserTracingIntegration(),
       filterEvents({ getMetaMetricsEnabled, log }),
     ],
+    profilesSampleRate: 1.0,
     release: RELEASE,
     // Client reports are automatically sent when a page's visibility changes to
     // "hidden", but cancelled (with an Error) that gets logged to the console.
@@ -93,9 +94,21 @@ function getClientOptions() {
     // we can safely turn them off by setting the `sendClientReports` option to
     // `false`.
     sendClientReports: false,
-    tracesSampleRate: 0.01,
+    tracesSampleRate: 1.0,
     transport: makeTransport,
   };
+}
+
+function setCircleCiTags() {
+  Sentry.setTag('circleci.enabled', process.env.CIRCLECI);
+
+  if (process.env.CIRCLECI) {
+    Sentry.setTag('circleci.branch', process.env.CIRCLE_BRANCH);
+    Sentry.setTag('circleci.buildNum', process.env.CIRCLE_BUILD_NUM);
+    Sentry.setTag('circleci.job', process.env.CIRCLE_JOB);
+    Sentry.setTag('circleci.nodeIndex', process.env.CIRCLE_NODE_INDEX);
+    Sentry.setTag('circleci.prNumber', process.env.CIRCLE_PR_NUMBER);
+  }
 }
 
 /**
@@ -205,7 +218,7 @@ function getSentryTarget() {
  * @returns `true` if MetaMetrics is enabled, `false` otherwise.
  */
 async function getMetaMetricsEnabled() {
-  if (METAMASK_BUILD_TYPE === 'mmi') {
+  if (METAMASK_BUILD_TYPE === 'mmi' || process.env.CIRCLECI) {
     return true;
   }
 
@@ -252,6 +265,8 @@ function setSentryClient() {
 
   Sentry.registerSpanErrorInstrumentation();
   Sentry.init(clientOptions);
+
+  setCircleCiTags();
 
   addDebugListeners();
 
