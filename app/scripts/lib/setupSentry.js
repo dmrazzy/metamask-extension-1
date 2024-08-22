@@ -100,7 +100,7 @@ function getClientOptions() {
 }
 
 function setCircleCiTags() {
-  Sentry.setTag('circleci.enabled', process.env.CIRCLECI);
+  Sentry.setTag('circleci.enabled', !!process.env.CIRCLECI);
 
   if (process.env.CIRCLECI) {
     Sentry.setTag('circleci.branch', process.env.CIRCLE_BRANCH);
