@@ -42,7 +42,7 @@ import { SnapUIRenderer } from '../../../components/app/snaps/snap-ui-renderer';
 import { SNAP_MANAGE_ACCOUNTS_CONFIRMATION_TYPES } from '../../../../shared/constants/app';
 ///: END:ONLY_INCLUDE_IF
 import { DAY } from '../../../../shared/constants/time';
-import { BlockSize, Display } from '../../../helpers/constants/design-system';
+import { BlockSize, Display, BackgroundColor } from '../../../helpers/constants/design-system';
 import ConfirmationFooter from './components/confirmation-footer';
 import {
   getTemplateValues,
@@ -529,6 +529,7 @@ export default function ConfirmationPage({
             useDelineator={false}
             onCancel={handleSnapDialogCancel}
             useFooter={isSnapDefaultDialog}
+            contentBackgroundColor={BackgroundColor.backgroundAlternative}
           />
         ) : (
           <MetaMaskTemplateRenderer sections={templatedValues.content} />
