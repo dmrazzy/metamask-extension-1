@@ -3144,6 +3144,7 @@ export default class MetamaskController extends EventEmitter {
       getUseRequestQueue: this.preferencesController.getUseRequestQueue.bind(
         this.preferencesController,
       ),
+      grantPermissionsIncremental: this.permissionController.grantPermissionsIncremental.bind(this.permissionController),
       getProviderConfig: () => this.networkController.state.providerConfig,
       setSecurityAlertsEnabled:
         preferencesController.setSecurityAlertsEnabled.bind(
