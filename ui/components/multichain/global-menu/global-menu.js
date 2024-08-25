@@ -264,7 +264,7 @@ export const GlobalMenu = ({ closeMenu, anchorElement, isOpen }) => {
         data-testid="global-menu-connected-sites"
         disabled={hasUnapprovedTransactions}
       >
-        "nid"
+        "global menu"
       </MenuItem>
 
       {
