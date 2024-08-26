@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TextVariant } from '../../../helpers/constants/design-system';
 import { useI18nContext } from '../../../hooks/useI18nContext';
-import { getNonTestNetworks, getTestNetworks } from '../../../selectors';
+import { getNonTestNetworks, getPermittedChainsByOrigin, getTestNetworks } from '../../../selectors';
 import {
   Modal,
   ModalOverlay,
@@ -19,6 +19,29 @@ export const EditNetworksModal = ({ onClose }) => {
   const t = useI18nContext();
   const nonTestNetworks = useSelector(getNonTestNetworks);
   const testNetworks = useSelector(getTestNetworks);
+  const chains = useSelector(getPermittedChainsByOrigin);
+  const permittedChains = Object.values(chains);
+  const flattenedPermittedChains = permittedChains.flat();
+  const [selectedChains, setSelectedChains] = useState(
+    flattenedPermittedChains,
+  );
+  console.log(chains, selectedChains);
+  const handleAccountClick = (chainId) => {
+    const index = selectedChains.indexOf(chainId);
+    let newSelectedChains = [];
+
+    if (index === -1) {
+      // If chainId is not already selected, add it to the selectedChains array
+      newSelectedChains = [...selectedChains, chainId];
+    } else {
+      // If chainId is already selected, remove it from the selectedChains array
+      newSelectedChains = selectedChains.filter(
+        (_item, idx) => idx !== index,
+      );
+    }
+    console.log(newSelectedChains, 'ggg');
+    setSelectedChains(newSelectedChains);
+  };
   return (
     <Modal
       isOpen
@@ -51,9 +74,11 @@ export const EditNetworksModal = ({ onClose }) => {
             iconSrc={network?.rpcPrefs?.imageUrl}
             key={network.id}
             onClick={() => {
-              console.log(network.id);
+              handleAccountClick(network.chainId);
             }}
-            startAccessory={<Checkbox isChecked />}
+            startAccessory={
+              <Checkbox isChecked={selectedChains.includes(network.chainId)} />
+            }
           />
         ))}
         <Box padding={4}>
@@ -65,9 +90,11 @@ export const EditNetworksModal = ({ onClose }) => {
             iconSrc={network?.rpcPrefs?.imageUrl}
             key={network.id}
             onClick={() => {
-              console.log(network.id);
+              handleAccountClick(network.chainId);
             }}
-            startAccessory={<Checkbox isChecked />}
+            startAccessory={
+              <Checkbox isChecked={selectedChains.includes(network.chainId)} />
+            }
             showEndAccessory={false}
           />
         ))}
