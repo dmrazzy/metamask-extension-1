@@ -22,6 +22,7 @@ import {
   ModalFooter,
   ButtonPrimary,
   ButtonPrimarySize,
+  ButtonSecondary,
 } from '../../component-library';
 import { AccountListItem } from '..';
 import {
@@ -207,6 +208,7 @@ export const EditAccountsModal = ({
               onClick={() => { disconnectAllAccounts(); onClose(); }}
               size={ButtonPrimarySize.Lg}
               block
+              danger
             >
               {t('disconnect')}
             </ButtonPrimary>
