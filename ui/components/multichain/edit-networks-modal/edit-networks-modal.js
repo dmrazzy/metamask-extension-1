@@ -3,7 +3,12 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TextVariant } from '../../../helpers/constants/design-system';
 import { useI18nContext } from '../../../hooks/useI18nContext';
-import { getNonTestNetworks, getOriginOfCurrentTab, getPermittedChainsByOrigin, getTestNetworks } from '../../../selectors';
+import {
+  getNonTestNetworks,
+  getOriginOfCurrentTab,
+  getPermittedChainsByOrigin,
+  getTestNetworks,
+} from '../../../selectors';
 import {
   Modal,
   ModalOverlay,
@@ -17,7 +22,11 @@ import {
   ButtonPrimarySize,
 } from '../../component-library';
 import { NetworkListItem } from '..';
-import { grantPermittedChains, removePermittedAccount, removePermittedChain } from '../../../store/actions';
+import {
+  grantPermittedChains,
+  removePermittedAccount,
+  removePermittedChain,
+} from '../../../store/actions';
 
 export const EditNetworksModal = ({ onClose }) => {
   const t = useI18nContext();
@@ -41,40 +50,38 @@ export const EditNetworksModal = ({ onClose }) => {
       newSelectedChains = [...selectedChains, chainId];
     } else {
       // If chainId is already selected, remove it from the selectedChains array
-      newSelectedChains = selectedChains.filter(
-        (_item, idx) => idx !== index,
-      );
+      newSelectedChains = selectedChains.filter((_item, idx) => idx !== index);
     }
     setSelectedChains(newSelectedChains);
   };
-    const managePermittedChains = (
-      selectedChains,
-      flattenedPermittedChains,
-      activeTabOrigin,
-    ) => {
-      if (!Array.isArray(selectedChains)) {
-        console.error('selectedChains is not an array:', selectedChains);
-        selectedChains = [];
-      }
+  const managePermittedChains = (
+    selectedChains,
+    flattenedPermittedChains,
+    activeTabOrigin,
+  ) => {
+    if (!Array.isArray(selectedChains)) {
+      console.error('selectedChains is not an array:', selectedChains);
+      selectedChains = [];
+    }
 
-      const newElements = selectedChains.filter(
-        (chain) => !flattenedPermittedChains.includes(chain),
-      );
+    const newElements = selectedChains.filter(
+      (chain) => !flattenedPermittedChains.includes(chain),
+    );
 
-      dispatch(grantPermittedChains(activeTabOrigin, newElements));
+    dispatch(grantPermittedChains(activeTabOrigin, newElements));
 
-      const removedElements = flattenedPermittedChains.filter(
-        (chain) => !selectedChains.includes(chain),
-      );
+    const removedElements = flattenedPermittedChains.filter(
+      (chain) => !selectedChains.includes(chain),
+    );
 
-      console.log(removedElements, newElements, 'remo');
+    console.log(removedElements, newElements, 'remo');
 
-      // Dispatch removePermittedChains for each removed element
-      removedElements.forEach((chain) => {
-        const selectedChain = [chain];
-        dispatch(removePermittedChain(activeTabOrigin, selectedChain));
-      });
-    };
+    // Dispatch removePermittedChains for each removed element
+    removedElements.forEach((chain) => {
+      const selectedChain = [chain];
+      dispatch(removePermittedChain(activeTabOrigin, selectedChain));
+    });
+  };
   return (
     <Modal
       isOpen
