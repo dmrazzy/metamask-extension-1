@@ -42,7 +42,11 @@ import { SnapUIRenderer } from '../../../components/app/snaps/snap-ui-renderer';
 import { SNAP_MANAGE_ACCOUNTS_CONFIRMATION_TYPES } from '../../../../shared/constants/app';
 ///: END:ONLY_INCLUDE_IF
 import { DAY } from '../../../../shared/constants/time';
-import { BlockSize, Display, BackgroundColor } from '../../../helpers/constants/design-system';
+import {
+  BlockSize,
+  Display,
+  BackgroundColor,
+} from '../../../helpers/constants/design-system';
 import ConfirmationFooter from './components/confirmation-footer';
 import {
   getTemplateValues,
@@ -499,18 +503,19 @@ export default function ConfirmationPage({
           </button>
         </div>
       )}
+      {isSnapCustomUIDialog && (
+        <Box width={BlockSize.Screen} style={{ position: 'fixed', zIndex: 1 }}>
+          <SnapAuthorshipHeader
+            snapId={pendingConfirmation?.origin}
+            onCancel={handleSnapDialogCancel}
+          />
+        </Box>
+      )}
       <Box
         className="confirmation-page__content"
         paddingTop={process.env.CHAIN_PERMISSIONS ? 4 : 0}
+        style={{ paddingTop: isSnapCustomUIDialog ? '64px' : 'initial' }}
       >
-        {isSnapCustomUIDialog && (
-          <Box width={BlockSize.Screen}>
-            <SnapAuthorshipHeader
-              snapId={pendingConfirmation?.origin}
-              onCancel={handleSnapDialogCancel}
-            />
-          </Box>
-        )}
         {templatedValues.networkDisplay && !process.env.CHAIN_PERMISSIONS ? (
           <Box justifyContent="center" marginTop={2} display={Display.Flex}>
             <NetworkDisplay />
