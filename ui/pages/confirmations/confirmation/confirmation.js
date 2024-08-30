@@ -501,7 +501,7 @@ export default function ConfirmationPage({
       )}
       <Box
         className="confirmation-page__content"
-        paddingTop={process.env.CHAIN_PERMISSIONS ? 4 : 0}
+        padding={process.env.CHAIN_PERMISSIONS ? 4 : 0}
       >
         {isSnapCustomUIDialog && (
           <Box width={BlockSize.Screen}>
