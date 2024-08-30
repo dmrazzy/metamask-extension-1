@@ -342,7 +342,7 @@ import {
   Caip25CaveatMutatorFactories,
   Caip25CaveatType,
 } from './lib/multichain-api/caip25permissions';
-// import { multichainMethodCallValidatorMiddleware } from './lib/multichain-api/multichainMethodCallValidator';
+import { multichainMethodCallValidatorMiddleware } from './lib/multichain-api/multichainMethodCallValidator';
 
 import { decodeTransactionData } from './lib/transaction/decode/util';
 import MultichainSubscriptionManager from './lib/multichain-api/MultichainSubscriptionManager';
@@ -5911,7 +5911,7 @@ export default class MetamaskController extends EventEmitter {
     });
 
     // TODO: Uncomment this when wallet lifecycle methods are added to api-specs
-    // engine.push(multichainMethodCallValidatorMiddleware);
+    engine.push(multichainMethodCallValidatorMiddleware);
 
     engine.push(
       createScaffoldMiddleware({

@@ -157,7 +157,7 @@ describe('provider_authorize', () => {
       },
     });
     expect(end).toHaveBeenCalledWith(
-      new EthereumRpcError(5300, 'Invalid Session Properties requested'),
+      new EthereumRpcError(5302, 'Invalid sessionProperties requested'),
     );
   });
 
