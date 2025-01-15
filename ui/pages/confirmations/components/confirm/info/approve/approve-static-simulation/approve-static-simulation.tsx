@@ -25,14 +25,14 @@ import { useIsNFT } from '../hooks/use-is-nft';
 export const ApproveStaticSimulation = () => {
   const t = useI18nContext();
 
-  const { currentConfirmation: transactionMeta } = useConfirmContext() as {
-    currentConfirmation: TransactionMeta;
-  };
+  const { currentConfirmation: transactionMeta } =
+    useConfirmContext<TransactionMeta>();
 
   const { decimals: initialDecimals } = useAssetDetails(
     transactionMeta?.txParams?.to,
     transactionMeta?.txParams?.from,
     transactionMeta?.txParams?.data,
+    transactionMeta?.chainId,
   );
 
   const decimals = initialDecimals || '0';
@@ -50,6 +50,8 @@ export const ApproveStaticSimulation = () => {
     return null;
   }
 
+  const { chainId } = transactionMeta;
+
   const formattedTokenText = (
     <Text
       data-testid="simulation-token-value"
@@ -65,7 +67,7 @@ export const ApproveStaticSimulation = () => {
     </Text>
   );
 
-  const simulationElements = (
+  const SpendingCapRow = (
     <ConfirmInfoRow
       label={t(isNFT ? 'simulationApproveHeading' : 'spendingCap')}
     >
@@ -87,11 +89,15 @@ export const ApproveStaticSimulation = () => {
           <Name
             value={transactionMeta.txParams.to as string}
             type={NameType.ETHEREUM_ADDRESS}
+            preferContractSymbol
+            variation={chainId}
           />
         </Box>
       </Box>
     </ConfirmInfoRow>
   );
+
+  const simulationElements = SpendingCapRow;
 
   return (
     <StaticSimulation
